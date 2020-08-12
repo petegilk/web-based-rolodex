@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import PersonComponent from './Person'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class Directory extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: []
+    }
+  }
+
+  //fetch api
+  componentDidMount() {
+    fetch('https://randomuser.me/api?results=25')
+      .then(response => response.json())
+      .then(response => {
+        this.setState({
+          items: response.results
+        })
+      });
+      
+  }
+
+  //display information from the api 
+  render() {
+    console.log(this.state.items);
+    return (
+      <div>
+        <ul>
+          {this.state.items.map((item, index) => {
+            return (
+              <PersonComponent key={item.id.value} item={item} isClicked={this.state.isClicked}/>
+            )
+          })}
+        </ul>
+      </div>
+    )
+  }
 }
 
-export default App;
+
+export default Directory;
